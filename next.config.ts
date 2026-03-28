@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   // GitHub Pages configuration
   basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
   // Output as static for GitHub Pages deployment
-  output: process.env.NEXT_BUILD_STANDALONE ? 'standalone' : undefined,
+  output: 'export',
   images: {
     unoptimized: true,
   },
