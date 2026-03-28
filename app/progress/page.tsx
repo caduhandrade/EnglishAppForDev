@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import type { Stats, CategoryStats, UserProgress, Category } from '@/types'
-import { getCategories } from '@/lib/data-store'
+import { getCategories, getFlashcardCount, getSentenceCount } from '@/lib/data-store'
 import { getStats, getRecentProgress, resetProgress } from '@/lib/client-db'
 
 interface FullStats extends Stats {
@@ -36,7 +36,14 @@ export default function ProgressPage() {
       getRecentProgress(),
       Promise.resolve(getCategories()),
     ]).then(([s, r, c]) => {
-      setStats(s)
+      // Preenche os campos extras de FullStats
+      const fullStats: FullStats = {
+        ...s,
+        categoryStats: [],
+        flashcardCount: getFlashcardCount(),
+        sentenceCount: getSentenceCount(),
+      }
+      setStats(fullStats)
       setRecent(r)
       setCategories(c)
       setLoading(false)
