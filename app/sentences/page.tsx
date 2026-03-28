@@ -4,6 +4,8 @@ import { useEffect, useState, useCallback } from 'react'
 import type { SentenceExercise, Category } from '@/types'
 import CategorySelector from '@/components/CategorySelector'
 import SentenceBuilder from '@/components/SentenceBuilder'
+import { getCategories, getSentenceExercises } from '@/lib/data-store'
+import { recordProgress as recordProgressDb } from '@/lib/client-db'
 
 export default function SentencesPage() {
   const [categories, setCategories] = useState<Category[]>([])
@@ -15,14 +17,12 @@ export default function SentencesPage() {
   const [loading, setLoading]     = useState(true)
 
   useEffect(() => {
-    Promise.all([
-      fetch('/api/categories').then(r => r.json()),
-      fetch('/api/sentences').then(r => r.json()),
-    ]).then(([cats, exs]) => {
-      setCategories(cats)
-      setAllExercises(exs)
-      setLoading(false)
-    })
+    // Carrega dados diretamente do módulo
+    const cats = getCategories()
+    const exs = getSentenceExercises()
+    setCategories(cats)
+    setAllExercises(exs)
+    setLoading(false)
   }, [])
 
   const buildDeck = useCallback((catId: number | null, exs: SentenceExercise[]) => {
@@ -38,11 +38,8 @@ export default function SentencesPage() {
   }, [allExercises, selectedCat, buildDeck])
 
   async function recordProgress(ex: SentenceExercise, isCorrect: boolean) {
-    await fetch('/api/progress', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ itemId: ex.id, itemType: 'Sentence', isCorrect, categoryId: ex.categoryId }),
-    })
+    // Salva progresso no IndexedDB
+    await recordProgressDb(ex.id, 'Sentence', isCorrect, ex.categoryId)
   }
 
   function handleCorrect() {

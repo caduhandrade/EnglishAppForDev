@@ -4,6 +4,8 @@ import { useEffect, useState, useCallback } from 'react'
 import type { Flashcard, Category } from '@/types'
 import CategorySelector from '@/components/CategorySelector'
 import FlashCard from '@/components/FlashCard'
+import { getCategories, getFlashcards } from '@/lib/data-store'
+import { recordProgress as recordProgressDb } from '@/lib/client-db'
 
 export default function FlashcardsPage() {
   const [categories, setCategories] = useState<Category[]>([])
@@ -15,14 +17,12 @@ export default function FlashcardsPage() {
   const [loading, setLoading]       = useState(true)
 
   useEffect(() => {
-    Promise.all([
-      fetch('/api/categories').then(r => r.json()),
-      fetch('/api/flashcards').then(r => r.json()),
-    ]).then(([cats, cards]) => {
-      setCategories(cats)
-      setAllCards(cards)
-      setLoading(false)
-    })
+    // Carrega dados diretamente do módulo
+    const cats = getCategories()
+    const cards = getFlashcards()
+    setCategories(cats)
+    setAllCards(cards)
+    setLoading(false)
   }, [])
 
   const buildDeck = useCallback((catId: number | null, cards: Flashcard[]) => {
@@ -38,11 +38,8 @@ export default function FlashcardsPage() {
   }, [allCards, selectedCat, buildDeck])
 
   async function recordProgress(card: Flashcard, isCorrect: boolean) {
-    await fetch('/api/progress', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ itemId: card.id, itemType: 'Flashcard', isCorrect, categoryId: card.categoryId }),
-    })
+    // Salva progresso no IndexedDB
+    await recordProgressDb(card.id, 'Flashcard', isCorrect, card.categoryId)
   }
 
   function handleKnow() {

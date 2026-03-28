@@ -2,6 +2,8 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import type { Stats, CategoryStats, UserProgress, Category } from '@/types'
+import { getCategories } from '@/lib/data-store'
+import { getStats, getRecentProgress, resetProgress } from '@/lib/client-db'
 
 interface FullStats extends Stats {
   categoryStats: CategoryStats[]
@@ -30,9 +32,9 @@ export default function ProgressPage() {
   const load = useCallback(() => {
     setLoading(true)
     Promise.all([
-      fetch('/api/stats').then(r => r.json()),
-      fetch('/api/progress').then(r => r.json()),
-      fetch('/api/categories').then(r => r.json()),
+      getStats(),
+      getRecentProgress(),
+      Promise.resolve(getCategories()),
     ]).then(([s, r, c]) => {
       setStats(s)
       setRecent(r)
@@ -44,7 +46,7 @@ export default function ProgressPage() {
   useEffect(() => { load() }, [load])
 
   async function handleReset() {
-    await fetch('/api/progress', { method: 'DELETE' })
+    await resetProgress()
     setConfirming(false)
     load()
   }
