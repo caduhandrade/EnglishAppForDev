@@ -1,9 +1,11 @@
 import type { NextConfig } from 'next'
 
+
+const repo = 'EnglishAppForDev';
 const nextConfig: NextConfig = {
-  // GitHub Pages configuration
-  basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
-  // Output as static for GitHub Pages deployment
+  // Configuração para GitHub Pages
+  basePath: `/${repo}`,
+  assetPrefix: `/${repo}/`,
   output: 'export',
   images: {
     unoptimized: true,
