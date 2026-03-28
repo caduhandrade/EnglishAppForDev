@@ -33,7 +33,7 @@ jobs:
       - name: 🔨 Build application
         env:
           NEXT_PUBLIC_BASE_PATH: /EnglishAppForDev
-        run: npm run build
+        run: npm run export
 
       - name: 📤 Setup Pages
         uses: actions/configure-pages@v4
