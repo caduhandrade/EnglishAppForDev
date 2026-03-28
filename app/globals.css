@@ -1,26 +1,56 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg:      #0F1117;
+  --surface: #1A1A2E;
+  --surface2:#16213E;
+  --accent:  #64FFDA;
+  --success: #7BED9F;
+  --error:   #FF7B7B;
+  --warning: #FFD32A;
+  --purple:  #A29BFE;
+  --blue:    #74B9FF;
+  --pink:    #FD79A8;
+  --text:    #E2E8F0;
+  --text2:   #CDD6F4;
+  --muted:   #8892B0;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* { box-sizing: border-box; }
+
+html, body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 3px; }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Card flip */
+.flip-card { perspective: 1000px; }
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.45s ease;
 }
+.flip-card-inner.flipped { transform: rotateY(180deg); }
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.flip-card-back { transform: rotateY(180deg); }
+
+/* Recording pulse */
+@keyframes pulse-ring {
+  0%,100% { transform: scale(1); opacity: 0.9; }
+  50%      { transform: scale(1.08); opacity: 0.5; }
+}
+.pulse-recording { animation: pulse-ring 1.2s ease-in-out infinite; }

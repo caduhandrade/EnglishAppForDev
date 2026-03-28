@@ -1,0 +1,54 @@
+# Git
+.git
+.gitignore
+
+# Dependencies (will be cleaned up after build)
+node_modules
+npm-debug.log
+
+# Development
+.next
+out
+build
+dist
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+.jest_cache
+coverage
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Build artifacts
+english-tech.db
+english-tech.db-shm
+english-tech.db-wal
+
+# Documentation
+README.md
+*.md
+docs/
+
+# CI/CD
+.github
+.gitlab-ci.yml
+.circleci
+
+# Examples
+example/
+examples/
+
+# Temporary
+tmp/
+temp/
+*.tmp
