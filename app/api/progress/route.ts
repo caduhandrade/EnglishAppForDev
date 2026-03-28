@@ -5,6 +5,8 @@ import { NextRequest, NextResponse } from 'next/server'
  * These endpoints keep API compatibility but don't store server-side data
  */
 
+export const dynamic = 'force-static'
+
 export function GET() {
   try {
     // Progress is stored client-side in IndexedDB

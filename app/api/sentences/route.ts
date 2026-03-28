@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getSentenceExercises } from '@/lib/data-store'
 
+export const dynamic = 'force-static'
+
 export function GET(req: NextRequest) {
   try {
     const catId = req.nextUrl.searchParams.get('categoryId')

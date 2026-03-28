@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import { getFlashcardCount, getSentenceCount } from '@/lib/data-store'
 
+export const dynamic = 'force-static'
+
 export function GET() {
   try {
     // User progress stats are stored client-side in IndexedDB
